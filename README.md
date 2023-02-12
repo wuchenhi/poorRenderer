@@ -32,10 +32,4 @@ time   seconds   seconds    calls  Ts/call  Ts/call  name
  32.55      0.92     0.46                             TGAImage::set(i
 ```
 
-float »»int
-
-```
-time   seconds   seconds    calls  Ts/call  Ts/call  name  
- 36.64      0.45     0.45                             TGAImage::set(int, int, TGAColor)
- 30.13      0.82     0.37                             line1(int, int,
-```
+float »»int   seconds   seconds    calls  Ts/call  Ts/call  name
