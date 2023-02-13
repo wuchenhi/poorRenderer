@@ -1,10 +1,10 @@
 SYSCONF_LINK = g++
-CPPFLAGS     = -O3
-LDFLAGS      = -O3
+CPPFLAGS     = -O3 -Wall -Wextra -Weffc++ -pedantic -std=c++98
+LDFLAGS      =
 LIBS         = -lm
 
 DESTDIR = ./
-TARGET  = main
+TARGET  = poorRenderer
 
 OBJECTS := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
