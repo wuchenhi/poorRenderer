@@ -15,6 +15,8 @@ void projection(float coeff=0.f); // coeff = -1/c
 // eye 眼睛（摄像机） 返回view
 void lookat(Vec3f eye, Vec3f center, Vec3f up);
 
+void line(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color);
+
 struct IShader {
     virtual ~IShader();
     // 顶点着色器的主要目标:转换顶点的坐标。次要目标:为片段着色器准备数据
@@ -34,5 +36,7 @@ struct Shader2 {
 };
 // void triangle(Vec4f *pts, IShader &shader, TGAImage &image, TGAImage &zbuffer);
 void triangleShadow(Vec4f *pts, Shader2 &shader, TGAImage &image, float *zbuffer);
+
+void triangleSao(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, TGAColor color);
 #endif //__OUR_GL_H__
 

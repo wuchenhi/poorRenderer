@@ -5,19 +5,25 @@
 #include <cassert>
 #include <iostream>
 
-template<size_t DimCols,size_t DimRows,typename T> class mat;
+template<size_t DimCols,size_t DimRows,typename T> 
+class mat;
 
-template <size_t DIM, typename T> struct vec {
-    vec() { for (size_t i=DIM; i--; data_[i] = T()); }
-          T& operator[](const size_t i)       { assert(i<DIM); return data_[i]; }
+// DIM维度的数组
+template <size_t DIM, typename T> 
+struct vec {
+    vec() { 
+        for (size_t i=DIM; i--; data_[i] = T()); 
+    }
+    
+    T& operator[](const size_t i)       { assert(i<DIM); return data_[i]; }
     const T& operator[](const size_t i) const { assert(i<DIM); return data_[i]; }
 private:
     T data_[DIM];
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-
-template <typename T> struct vec<2,T> {
+// 二维
+template <typename T> 
+struct vec<2,T> {
     vec() : x(T()), y(T()) {}
     vec(T X, T Y) : x(X), y(Y) {}
     template <class U> vec<2,T>(const vec<2,U> &v);
@@ -28,8 +34,7 @@ template <typename T> struct vec<2,T> {
     T x,y;
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-
+// 三维
 template <typename T> struct vec<3,T> {
     vec() : x(T()), y(T()), z(T()) {}
     vec(T X, T Y, T Z) : x(X), y(Y), z(Z) {}
@@ -42,14 +47,11 @@ template <typename T> struct vec<3,T> {
     T x,y,z;
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-
 template<size_t DIM,typename T> T operator*(const vec<DIM,T>& lhs, const vec<DIM,T>& rhs) {
     T ret = T();
     for (size_t i=DIM; i--; ret+=lhs[i]*rhs[i]);
     return ret;
 }
-
 
 template<size_t DIM,typename T>vec<DIM,T> operator+(vec<DIM,T> lhs, const vec<DIM,T>& rhs) {
     for (size_t i=DIM; i--; lhs[i]+=rhs[i]);
@@ -71,12 +73,14 @@ template<size_t DIM,typename T,typename U> vec<DIM,T> operator/(vec<DIM,T> lhs, 
     return lhs;
 }
 
+// 提高维度 补1
 template<size_t LEN,size_t DIM,typename T> vec<LEN,T> embed(const vec<DIM,T> &v, T fill=1) {
     vec<LEN,T> ret;
     for (size_t i=LEN; i--; ret[i]=(i<DIM?v[i]:fill));
     return ret;
 }
 
+// 减少到指定维度
 template<size_t LEN,size_t DIM, typename T> vec<LEN,T> proj(const vec<DIM,T> &v) {
     vec<LEN,T> ret;
     for (size_t i=LEN; i--; ret[i]=v[i]);
@@ -94,9 +98,10 @@ template <size_t DIM, typename T> std::ostream& operator<<(std::ostream& out, ve
     return out ;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-
-template<size_t DIM,typename T> struct dt {
+/**************************************************************************/
+// 干嘛的
+template<size_t DIM,typename T> 
+struct dt {
     static T det(const mat<DIM,DIM,T>& src) {
         T ret=0;
         for (size_t i=DIM; i--; ret += src[0][i]*src.cofactor(0,i));
@@ -104,15 +109,16 @@ template<size_t DIM,typename T> struct dt {
     }
 };
 
-template<typename T> struct dt<1,T> {
+template<typename T> 
+struct dt<1,T> {
     static T det(const mat<1,1,T>& src) {
         return src[0][0];
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-
-template<size_t DimRows,size_t DimCols,typename T> class mat {
+// 矩阵
+template<size_t DimRows,size_t DimCols,typename T>
+class mat {
     vec<DimCols,T> rows[DimRows];
 public:
     mat() {}
@@ -126,19 +132,19 @@ public:
         assert(idx<DimRows);
         return rows[idx];
     }
-
+    // 列
     vec<DimRows,T> col(const size_t idx) const {
         assert(idx<DimCols);
         vec<DimRows,T> ret;
         for (size_t i=DimRows; i--; ret[i]=rows[i][idx]);
         return ret;
     }
-
+    // 更改 列
     void set_col(size_t idx, vec<DimRows,T> v) {
         assert(idx<DimCols);
         for (size_t i=DimRows; i--; rows[i][idx]=v[i]);
     }
-
+    // 单位矩阵
     static mat<DimRows,DimCols,T> identity() {
         mat<DimRows,DimCols,T> ret;
         for (size_t i=DimRows; i--; )
@@ -156,11 +162,11 @@ public:
             for (size_t j=DimCols-1;j--; ret[i][j]=rows[i<row?i:i+1][j<col?j:j+1]);
         return ret;
     }
-
+    // 辅助因子
     T cofactor(size_t row, size_t col) const {
         return get_minor(row,col).det()*((row+col)%2 ? -1 : 1);
     }
-
+    // 伴随矩阵
     mat<DimRows,DimCols,T> adjugate() const {
         mat<DimRows,DimCols,T> ret;
         for (size_t i=DimRows; i--; )
@@ -178,14 +184,14 @@ public:
         return invert_transpose().transpose();
     }
 
+    // 转置 
     mat<DimCols,DimRows,T> transpose() {
         mat<DimCols,DimRows,T> ret;
-        for (size_t i=DimCols; i--; ret[i]=this->col(i));
+        for (size_t i=DimCols; i--; 
+            ret[i]=this->col(i)); // 列变成行
         return ret;
     }
 };
-
-/////////////////////////////////////////////////////////////////////////////////
 
 template<size_t DimRows,size_t DimCols,typename T> vec<DimRows,T> operator*(const mat<DimRows,DimCols,T>& lhs, const vec<DimCols,T>& rhs) {
     vec<DimRows,T> ret;
@@ -210,12 +216,11 @@ template <size_t DimRows,size_t DimCols,class T> std::ostream& operator<<(std::o
     return out;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-
 typedef vec<2,  float> Vec2f;
 typedef vec<2,  int>   Vec2i;
 typedef vec<3,  float> Vec3f;
 typedef vec<3,  int>   Vec3i;
 typedef vec<4,  float> Vec4f;
 typedef mat<4,4,float> Matrix;
+
 #endif //__GEOMETRY_H__

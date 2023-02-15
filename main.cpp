@@ -88,10 +88,10 @@ struct Shader : public Shader2 {
     }
 
     virtual bool fragment(Vec3f bar, TGAColor &color) {
-        Vec4f sb_p = uniform_Mshadow*embed<4>(varying_tri*bar); // 阴影缓冲区中的对应点 补1为齐次矩阵
+        Vec4f sb_p = uniform_Mshadow*embed<4>(varying_tri*bar);   // 阴影缓冲区中的对应点 补1为齐次矩阵
         sb_p = sb_p/sb_p[3];
-        int idx = int(sb_p[0]) + int(sb_p[1])*width; // 阴影缓冲器阵列中的索引
-        float shadow = .3+.7*(shadowbuffer[idx]<sb_p[2] + 43.34); //现在要确定当前像素是否被点亮,将z坐标与存储在阴影缓冲区中的值进行比较
+        int idx = int(sb_p[0]) + int(sb_p[1])*width;              // 阴影缓冲器阵列中的索引
+        float shadow = .3+.7*(shadowbuffer[idx]<sb_p[2] + 43.34); // 现在要确定当前像素是否被点亮,将z坐标与存储在阴影缓冲区中的值进行比较
         
         Vec2f uv = varying_uv*bar;
         Vec3f n = proj<3>(uniform_MIT*embed<4>(model->normal(uv))).normalize(); // 法线
