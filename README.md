@@ -15,4 +15,4 @@ framebuffer.tga is ambient occlusion
 
 shadow.tga is shadow map
 
-![image](image/framebuffer.tga)
+![image](image/shadow.tga)
