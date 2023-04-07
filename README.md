@@ -1,18 +1,18 @@
 ## poorRenderer
 
-简单的渲染器
+锟津单碉拷锟斤拷染锟斤拷
 
-### 编译运行
+### 锟斤拷锟斤拷锟斤拷锟斤拷
 
 ```
 make
 ./poorRenderer obj/african_head/african_head.obj
 ```
 
-framebuffer.tga 为环境光遮蔽效果
+framebuffer.tga 为锟斤拷锟斤拷锟斤拷锟节憋拷效锟斤拷
 
-![1676358811573](image/README/1676358811573.png)
+![image](image/framebuffer.tga)
 
-shadow.tga 为shadow map效果
+shadow.tga 为shadow map效锟斤拷
 
-![1676358867632](image/README/1676358867632.png)
+![image](image/framebuffer.tga)
